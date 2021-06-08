@@ -7,6 +7,7 @@ function players_update()
 		two_players=not two_players
 	end
 	if btnp(4) then start_game() end
+	if btnp(5) then go_to_title() end
 end
 
 

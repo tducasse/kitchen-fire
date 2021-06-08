@@ -19,19 +19,19 @@ levels={
 	[2]={
 		rank=0,
 		music=music_level_2,
-		star1=30,
-		star2=50,
-		star3=70,
-		duration=60,
-		recipe_time=5,
-		map_x=0,
+		star1=20,
+		star2=40,
+		star3=60,
+		duration=90,
+		recipe_time=8,
+		map_x=16,
 		map_y=0,
 		x=30,
 		y=60,
-		x2=50,
+		x2=90,
 		y2=60,
-		plates={{x=3,y=2},{x=12,y=2}},
-		pans={{x=15,y=7},{x=15,y=10}}
+		plates={{x=23,y=13},{x=26,y=13}},
+		pans={{x=27,y=5},{x=27,y=8}}
 	},
 	[3]={
 		rank=0,

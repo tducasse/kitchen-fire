@@ -96,7 +96,7 @@ end
 
 function game_draw()
 	cls()
-	map(0,0)
+	map(levels[level].map_x,levels[level].map_y)
 	if not p.dead then
 		spr(p.sprite,p.x,p.y,1,1,p.flip)
 		if p.bag.spr and not endt then
@@ -143,8 +143,8 @@ function fall(player)
 			end
 		end
 	else
-		local map_x=flr((player.x+4)/8)
-		local map_y=flr((player.y+4)/8)
+		local map_x=flr((player.x+4)/8)+levels[level].map_x
+		local map_y=flr((player.y+4)/8)+levels[level].map_y
 		local tile=mget(map_x,map_y)
 		if fget(tile)==hole then
 			sfx(fall_sound)
@@ -181,18 +181,22 @@ end
 
 
 function draw_cooking_timer()
+	local map_x=levels[level].map_x
+	local map_y=levels[level].map_y
 	for item in all(cooking) do
+		local x=(item.x-map_x)*8
+		local y=(item.y-map_y)*8
 		local time_cooking=flr(time()-item.t)
 		if item.cooked and not item.burnt then
 			if (time()*1000)%2==0 then
-				rectfill(item.x*8,item.y*8+8,item.x*8+8,item.y*8+8,8)
+				rectfill(x,y+8,x+8,y+8,8)
 			end
 			break
 		elseif item.burnt then
 			break
 		else
 		for i=0,time_cooking do
-			pset(item.x*8+i,item.y*8+8,3)
+			pset(x+i,y+8,3)
 		end
 	end
 	end
@@ -340,8 +344,8 @@ end
 
 
 function get_around(mx,my)
-	local x=flr(mx/8)
-	local y=flr(my/8)
+	local x=flr(mx/8)+levels[level].map_x
+	local y=flr(my/8)+levels[level].map_y
 	local x_top,x_bottom,x_right,x_left=x,x,x+1,x-1
 	local y_top,y_bottom,y_right,y_left=y-1,y+1,y,y
 	local x_top_right,y_top_right=x+1,y-1

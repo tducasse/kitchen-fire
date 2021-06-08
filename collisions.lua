@@ -19,8 +19,8 @@ end
 
 
 function solid(x,y)
-	local map_x=flr(x/8)
-	local map_y=flr(y/8)
+	local map_x=flr(x/8)+levels[level].map_x
+	local map_y=flr(y/8)+levels[level].map_y
 	local map_sprite=mget(map_x,map_y)
 	local flag=fget(map_sprite)
 	return flag>=1 and flag~=hole
