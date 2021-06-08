@@ -9,5 +9,5 @@ pick_sound=7
 
 music_title=3
 music_level_1=0
-music_level_2=0
+music_level_2=4
 music_level_3=0
