@@ -33,6 +33,7 @@ start_timer=2
 max_recipes=8
 cooking_timer=6
 burnt_timer=3
+death_time=2
 
 extinguisher=13
 pan=9
@@ -41,6 +42,7 @@ sausage=2
 pan_cooking=12
 pan_burning=10
 pan_cooked=11
+hole=14
 
 last=0
 started=false
@@ -61,7 +63,10 @@ function game_init()
 	wait=2
 	cooking={}
 	players={}
-	make_player(curr.x,curr.y)
+	make_p1()
+	if two_players then
+		make_p2()
+	end
 	current_recipes={}
 	started=true
 	start=time()
@@ -75,8 +80,10 @@ end
 
 function game_update()
 	move_player(p)
+	fall(p)
 	if two_players then
 		move_player(p2)
+		fall(p2)
 	end
 	move_recipes()
 	end_game()
@@ -90,26 +97,30 @@ end
 function game_draw()
 	cls()
 	map(0,0)
-	spr(p.sprite,p.x,p.y,1,1,p.flip)
-	if p.bag.spr and not endt then
-		local x=p.x
-		if p.flip then
-			x-=7
-		else
-			x+=7
-		end
-		spr(p.bag.spr,x,p.y)
-	end
-	if two_players then
-		spr(p2.sprite,p2.x,p2.y,1,1,p2.flip)
-		if p2.bag.spr and not endt then
-			local x=p2.x
-			if p2.flip then
+	if not p.dead then
+		spr(p.sprite,p.x,p.y,1,1,p.flip)
+		if p.bag.spr and not endt then
+			local x=p.x
+			if p.flip then
 				x-=7
 			else
 				x+=7
 			end
-			spr(p2.bag.spr,x,p2.y)
+			spr(p.bag.spr,x,p.y)
+		end
+	end
+	if two_players then
+		if not p2.dead then
+			spr(p2.sprite,p2.x,p2.y,1,1,p2.flip)
+			if p2.bag.spr and not endt then
+				local x=p2.x
+				if p2.flip then
+					x-=7
+				else
+					x+=7
+				end
+				spr(p2.bag.spr,x,p2.y)
+			end
 		end
 	end
 	print(tostr(score),1,3,7)
@@ -119,6 +130,31 @@ function game_draw()
 	draw_recipes()
 	draw_timer()
 	draw_cooking_timer()
+end
+
+
+function fall(player)
+	if player.dead then
+		if time()-player.dead>death_time then
+			if player==p then
+				return make_p1()
+			else
+				return make_p2()
+			end
+		end
+	else
+		local map_x=flr((player.x+4)/8)
+		local map_y=flr((player.y+4)/8)
+		local tile=mget(map_x,map_y)
+		if fget(tile)==hole then
+			sfx(fall_sound)
+			if player==p then
+				p.dead=time()
+			else
+				p2.dead=time()
+			end
+		end
+	end
 end
 
 
@@ -198,10 +234,10 @@ function draw_timer()
 end
 
 
-function make_player(x, y)
+function make_p1()
 	p={}
-	p.x=x
-	p.y=y
+	p.x=levels[level].x
+	p.y=levels[level].y
 	p.dx=0
 	p.dy=0
 	p.w=7
@@ -214,10 +250,13 @@ function make_player(x, y)
 	p.flip=false
 	p.bag={flag=nil, spr=nil}
 	p.idx=0
-	if two_players then
+end
+
+
+function make_p2()
 		p2={}
-		p2.x=x
-		p2.y=y+10
+		p2.x=levels[level].x2
+		p2.y=levels[level].y2
 		p2.dx=0
 		p2.dy=0
 		p2.w=7
@@ -230,8 +269,8 @@ function make_player(x, y)
 		p2.flip=false
 		p2.bag={flag=nil, spr=nil}
 		p2.idx=1
-	end
 end
+
 
 function move_recipes()
 	if time()-last>levels[level].recipe_time and not endt then

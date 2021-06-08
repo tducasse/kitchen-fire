@@ -24,3 +24,14 @@ function go_to_results()
 		state.up=results_update
 		state.dw=results_draw
 end
+
+
+function prints(...)
+	local params = {...}
+	local all_str=tostr(params[1])
+	deli(params,1)
+	for item in all(params) do
+		all_str=all_str..', '..tostr(item)
+	end
+	printh(all_str)
+end

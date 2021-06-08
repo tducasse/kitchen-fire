@@ -11,6 +11,8 @@ levels={
 		map_y=0,
 		x=30,
 		y=60,
+		x2=50,
+		y2=60,
 		plates={{x=3,y=2},{x=12,y=2}},
 		pans={{x=15,y=7},{x=15,y=10}}
 	},
@@ -24,8 +26,10 @@ levels={
 		recipe_time=5,
 		map_x=0,
 		map_y=0,
-		x=50,
+		x=30,
 		y=60,
+		x2=50,
+		y2=60,
 		plates={{x=3,y=2},{x=12,y=2}},
 		pans={{x=15,y=7},{x=15,y=10}}
 	},
@@ -39,8 +43,10 @@ levels={
 		recipe_time=5,
 		map_x=0,
 		map_y=0,
-		x=50,
+		x=30,
 		y=60,
+		x2=50,
+		y2=60,
 		plates={{x=3,y=2},{x=12,y=2}},
 		pans={{x=15,y=7},{x=15,y=10}}
 	}

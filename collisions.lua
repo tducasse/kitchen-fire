@@ -22,7 +22,8 @@ function solid(x,y)
 	local map_x=flr(x/8)
 	local map_y=flr(y/8)
 	local map_sprite=mget(map_x,map_y)
-	return fget(map_sprite)>=1
+	local flag=fget(map_sprite)
+	return flag>=1 and not flag==hole
 end
 
 
