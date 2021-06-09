@@ -162,19 +162,23 @@ function cook_stuff()
 	for item in all(cooking) do
 		local time_cooking=flr(time()-item.t)
 		if time_cooking>cooking_timer then
-			item.cooked=true
 			if time_cooking>burnt_timer+cooking_timer then
-				item.burnt=true
 				local burning=get_sprite_by_flag(pan_burning)
 				if burning then
+					sfx(burning_sound,3)
 					mset(item.x,item.y,burning)
 				end
+				item.burnt=true
 			else
+				if not item.cooked then
+					sfx(about_to_burn_sound)
+				end
 				local cooked=get_sprite_by_flag(pan_cooked)
 				if cooked then
 					mset(item.x,item.y,cooked)
 				end
 			end
+			item.cooked=true
 		end
 	end
 end
@@ -189,16 +193,13 @@ function draw_cooking_timer()
 		local time_cooking=flr(time()-item.t)
 		if item.cooked and not item.burnt then
 			if (time()*1000)%2==0 then
-				rectfill(x,y+8,x+8,y+8,8)
+				rectfill(x,y+8,x+7,y+8,8)
 			end
-			break
-		elseif item.burnt then
-			break
-		else
-		for i=0,time_cooking do
-			pset(x+i,y+8,3)
+		elseif not item.burnt then
+			for i=0,time_cooking do
+				pset(x+i,y+8,3)
+			end
 		end
-	end
 	end
 end
 
@@ -564,6 +565,7 @@ function extinguish(tile,player)
 		local new_spr=get_sprite_by_flag(pan)
 		if new_spr then
 			sfx(drop_sound)
+			sfx(-2,3)
 			mset(tile.x,tile.y,new_spr)
 			remove_cooking(tile)
 		else

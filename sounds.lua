@@ -6,6 +6,8 @@ wrong_sound=4
 right_sound=5
 drop_sound=6
 pick_sound=7
+about_to_burn_sound=14
+burning_sound=15
 
 music_title=3
 music_level_1=4
