@@ -1,7 +1,7 @@
 levels={
 	[1]={
 		recipes={40,48,36},
-		rank=1,
+		rank=0,
 		music=music_level_1,
 		star1=170,
 		star2=200,
@@ -19,7 +19,7 @@ levels={
 	},
 	[2]={
 		recipes={38,34,42,50},
-		rank=1,
+		rank=0,
 		music=music_level_2,
 		star1=90,
 		star2=120,
