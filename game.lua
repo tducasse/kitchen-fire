@@ -165,13 +165,13 @@ function cook_stuff()
 			if time_cooking>burnt_timer+cooking_timer then
 				local burning=get_sprite_by_flag(pan_burning)
 				if burning then
-					sfx(burning_sound,3)
+					sfx(burning_sound,item.c)
 					mset(item.x,item.y,burning)
 				end
 				item.burnt=true
 			else
 				if not item.cooked then
-					sfx(about_to_burn_sound)
+					sfx(about_to_burn_sound,item.c)
 				end
 				local cooked=get_sprite_by_flag(pan_cooked)
 				if cooked then
@@ -204,9 +204,17 @@ function draw_cooking_timer()
 end
 
 
+function stop_burning_sounds()
+	for item in all(cooking) do
+		sfx(-1,item.c)
+	end
+end
+
+
 function end_game()
 	if start and not endt and time()-start>levels[level].duration then
 		music(-1, 300)
+		stop_burning_sounds()
 		endt=time()
 		if score>=levels[level].star3 then
 			rank=3
@@ -494,7 +502,8 @@ end
 
 
 function add_recipe()
-	local flag=rnd(recipes)
+	local to_pick_from=levels[level].recipes or recipes
+	local flag=rnd(to_pick_from)
 	add(current_recipes, get_sprite_by_flag(flag))
 end
 
@@ -511,7 +520,7 @@ function eval_served(player)
 	end
 	if found then
 		sfx(right_sound)
-		score+=10-(#current_recipes-idx)
+		score+=20-(#current_recipes-idx)
 		del(current_recipes,player.bag.spr)
 		return 0
 	end
@@ -538,7 +547,7 @@ function drop_on_pan(tile,player)
 		if new_spr then
 			sfx(drop_sound)
 			mset(tile.x,tile.y,new_spr)
-			add(cooking,{x=tile.x,y=tile.y,t=time()})
+			add(cooking,{x=tile.x,y=tile.y,t=time(),c=#cooking+2})
 		else
 			sfx(nope_sound)
 		end
@@ -553,6 +562,7 @@ end
 function remove_cooking(tile)
 	for k,item in ipairs(cooking) do
 		if item.x==tile.x and item.y==tile.y then
+			sfx(-1,item.c)
 			deli(cooking,k)
 		end
 	end
@@ -565,7 +575,6 @@ function extinguish(tile,player)
 		local new_spr=get_sprite_by_flag(pan)
 		if new_spr then
 			sfx(drop_sound)
-			sfx(-2,3)
 			mset(tile.x,tile.y,new_spr)
 			remove_cooking(tile)
 		else
