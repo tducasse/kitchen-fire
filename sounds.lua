@@ -12,4 +12,4 @@ burning_sound=15
 music_title=3
 music_level_1=4
 music_level_2=0
-music_level_3=0
+music_level_3=7
